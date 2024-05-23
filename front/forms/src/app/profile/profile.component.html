@@ -1,0 +1,35 @@
+<div class="container mt-2">
+  <div class="row justify-content-end">
+    <div class="col-8 m-4">
+      <router-outlet></router-outlet>
+    </div>
+    <div
+      class="col-3"
+      style="display: flex; align-items: stretch; min-height: 100vh"
+    >
+      <div class="row">
+        <div
+          class="col-12 fixed_column"
+          style="background-color: #fff; border-radius: 10px"
+        >
+          <div class="row p-2" style="border-radius: 10px">
+            <a routerLink="edit">
+              <div class="col-12 personal_info">
+                البيانات الشخصية
+                <i class="bi bi-person-lines-fill m-3"></i>
+              </div>
+            </a>
+          </div>
+          <div class="row p-2" style="border-radius: 10px">
+            <a routerLink="social">
+              <div class="col-12 personal_info">
+                روابط التواصل الإجتماعى
+                <i class="bi bi-link-45deg"></i>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

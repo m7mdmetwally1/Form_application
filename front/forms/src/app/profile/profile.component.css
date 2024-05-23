@@ -1,0 +1,20 @@
+.fixed_column {
+  background-color: #ffff;
+  height: auto;
+  border-radius: 10px;
+}
+
+.personal_info {
+  text-align: right;
+  color: grey;
+}
+
+.personal_info:hover {
+  background-color: green;
+  cursor: pointer;
+  color: #fff;
+}
+
+a {
+  text-decoration: none;
+}

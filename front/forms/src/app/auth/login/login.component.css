@@ -1,0 +1,38 @@
+.backgroundColor {
+  height: 100%;
+  background-image: url("./../../../assets/images4.png");
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
+.checked_position {
+  text-align: right;
+  align-items: right;
+}
+
+.icon-row {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.bi {
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.icon-facebook {
+  color: #3b5998;
+}
+
+.icon-twitter {
+  color: #1da1f2;
+}
+
+.icon-google {
+  color: #db4437;
+}
+
+* {
+  color: #fff;
+}

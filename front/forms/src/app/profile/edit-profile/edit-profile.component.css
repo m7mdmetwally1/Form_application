@@ -1,0 +1,28 @@
+.personal_info_title {
+  display: flex;
+  justify-content: end;
+  gap: 50px;
+  color: #fff;
+}
+
+.personal_info {
+  text-align: right;
+}
+
+.personal_info:hover {
+  background-color: green;
+  cursor: pointer;
+  color: #fff;
+}
+
+.form-label {
+  display: block;
+  text-align: right;
+}
+
+.kind {
+  display: flex;
+  justify-content: end;
+  gap: 5px;
+  color: #fff;
+}

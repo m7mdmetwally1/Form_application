@@ -1,0 +1,234 @@
+<div class="container mt-3">
+  @if (showAlert) {
+  <div class="alert alert-danger" role="alert">
+    {{ serverErrorMessage }}
+  </div>
+  }
+  <div class="row">
+    <div class="col-12">
+      <div class="row text-center mt-3">
+        <h1 class="white-color">تسجيل الدخول</h1>
+        <h4 class="white-color">قم بالتسجيل لنتائج بحثية أفضل</h4>
+      </div>
+
+      <div class="w-75 m-auto mt-5">
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+          <div class="row mb-3">
+            <div class="col-6 form-group">
+              <input
+                type="text"
+                class="form-control formInput"
+                id="firstName"
+                placeholder="الأسم الأول"
+                formControlName="firstName"
+                [ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }"
+              />
+              @if (submitted && f['firstName'].errors) {
+              <div class="invalid-feedback">
+                @if (f['firstName'].errors['required']) {
+                <div>firstName is required</div>
+                } @if (f['firstName'].errors['minlength']) {
+                <div>min length is 6 chars</div>
+                } @if (f['firstName'].errors['maxlength']) {
+                <div>max length is 20 chars</div>
+                }
+              </div>
+              }
+            </div>
+            <div class="col-6 form-group">
+              <input
+                type="text"
+                class="form-control formInput"
+                id="lastName"
+                placeholder="الأسم الأول"
+                formControlName="lastName"
+                [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }"
+              />
+              @if (submitted && f['lastName'].errors) {
+              <div class="invalid-feedback">
+                @if (f['lastName'].errors['required']) {
+                <div>lastName is required</div>
+                } @if (f['lastName'].errors['minlength']) {
+                <div>min length is 6 chars</div>
+                } @if (f['lastName'].errors['maxlength']) {
+                <div>max length is 20 chars</div>
+                }
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-6">
+              <input
+                type="email"
+                class="form-control formInput"
+                placeholder="البريد الإلكترونى"
+                formControlName="email"
+                id="email"
+                [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+              />
+              @if (submitted && f['email'].errors) {
+              <div class="invalid-feedback">
+                @if (f['email'].errors['required']) {
+                <div>email is required</div>
+                } @if (f['email'].errors['email']) {
+                <div>should be an email</div>
+                }
+              </div>
+              }
+            </div>
+            <div class="col-4">
+              <input
+                type="text"
+                class="form-control formInput"
+                id="mobile"
+                formControlName="mobile"
+                placeholder="الجوال"
+                [ngClass]="{ 'is-invalid': submitted && f['mobile'].errors }"
+              />
+              @if (submitted && f['mobile'].errors) {
+              <div class="invalid-feedback">
+                @if (f['mobile'].errors['required']) {
+                <div>mobile number is required</div>
+                } @if (f['mobile'].errors['invalidMobileNumber']) {
+                <div>should be valid mobile number</div>
+                }
+              </div>
+              }
+            </div>
+            <div class="col-2">
+              <div class="dropdown">
+                <select class="form-select" formControlName="country">
+                  @for ( country of countryName; track country) {
+                  <option [value]="country">{{ country }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 form-Group">
+              <input
+                type="password"
+                class="form-control formInput"
+                id="password"
+                formControlName="password"
+                [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+              />
+              @if (submitted && f['password'].errors) {
+              <div class="invalid-feedback">
+                @if (f['password'].errors['required']) {
+                <div>Password is required</div>
+                } @if (f['password'].errors['minlength']) {
+                <div>Password must be at least 6 characters</div>
+                } @if (f['password'].errors['maxlength']) {
+                <div>Username must not exceed 40 characters</div>
+                }
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 form-Group">
+              <input
+                type="password"
+                class="form-control formInput"
+                id="passwordConfirm"
+                formControlName="passwordConfirm"
+                [ngClass]="{
+                  'is-invalid': submitted && f['passwordConfirm'].errors
+                }"
+              />
+              @if (submitted && f['passwordConfirm'].errors) {
+              <div class="invalid-feedback">
+                @if (f['passwordConfirm'].errors['required']) {
+                <div>Confirm Password is required</div>
+                } @if (f['passwordConfirm'].errors['matching']) {
+                <div>Confirm Password does not match</div>
+                }
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="row mb-2 checked_position form-Group">
+            <div class="radio">
+              <label>
+                <p class="white-color">أوافق على كافة الشروط والأحكام</p>
+                <input
+                  type="checkbox"
+                  formControlName="acceptTerms"
+                  class="checked_position form-check-input"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['acceptTerms'].errors
+                  }"
+                />
+                @if (submitted && f['acceptTerms'].errors) {
+                <div class="invalid-feedback">Accept Terms is required</div>
+                }
+              </label>
+            </div>
+          </div>
+
+          <div class="row mb-5 checked_position">
+            <div class="col-12 text-end">
+              <label
+                class="form-check-label me-2 white-color"
+                for="emailCheckbox"
+              >
+                البريد الإلكترونى
+              </label>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="emailCheckbox"
+                formControlName="emailCheckbox"
+              />
+
+              <label
+                class="form-check-label mx-2 white-color"
+                for="emailCheckbox"
+              >
+                رقم الجوال
+              </label>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="mobileCheckbox"
+                formControlName="mobileCheckbox"
+                [ngClass]="{
+                  'is-invalid': submitted && f['mobileCheckbox'].errors
+                }"
+              />
+              @if (submitted && f['emailCheckbox'].errors){
+              <div class="invalid-feedback">
+                @if (submitted && f['mobileCheckbox'].errors ){
+                <div>at least one method required</div>
+                }
+              </div>
+
+              }
+
+              <span class="white-color"> إرسال رمز التحقق من خلال</span>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 text-center form-Group">
+              <button type="submit" class="btn btn-success px-5">تسجيل</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="row mb-2">
+          <div class="col-12 text-center" style="font-weight: bold">
+            لديك حساب <a href="/login" style="color: yellow">تسجيل الدخول</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

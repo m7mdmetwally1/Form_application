@@ -1,0 +1,92 @@
+<div class="container register-login mt-3">
+  <div class="row">
+    <div class="col-12">
+      <div class="row text-center mt-5">
+        <h1>تسجيل الدخول</h1>
+        <h4>قم بتسجيل الدخول لنتائج بحثية أفضل</h4>
+      </div>
+
+      <div class="w-50 m-auto mt-5">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="row mb-4">
+            <input
+              type="email"
+              class="form-control formInput"
+              id="password"
+              placeholder="البريد الإلكترونى"
+              formControlName="email"
+              [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+            />
+
+            @if (submitted && f['email'].errors) {
+            <div class="invalid-feedback">
+              @if (f['email'].errors['required']) {
+              <div>email is required</div>
+              } @if (f['email'].errors['email']) {
+              <div>should be an email</div>
+              }
+            </div>
+            }
+          </div>
+
+          <div class="row mb-3">
+            <input
+              type="password"
+              class="form-control formInput"
+              id="password"
+              formControlName="password"
+              [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+            />
+            @if (submitted && f['password'].errors) {
+            <div class="invalid-feedback">
+              @if (f['password'].errors['required']) {
+              <div>Password is required</div>
+              }
+            </div>
+            }
+          </div>
+          <div class="row mb-3">
+            <div class="col-6">
+              <div class="col-12 text-start" style="font-weight: bold">
+                <a href="/login" style="color: white"> هل نسيت كلمة المرور</a>
+              </div>
+            </div>
+            <!-- <div class="col-6 checked_position">
+              <div class="radio">
+                <label>
+                  تذكرنى
+                  <input type="radio" formControlName="gender" />
+                </label>
+              </div>
+            </div> -->
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-12 text-center form-Group">
+              <button type="submit" class="btn btn-success px-5">تسجيل</button>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="col-12 text-center" style="font-weight: bold">
+              ليس لديك حساب؟<a href="/login" style="color: yellow">
+                تسجيل جديد</a
+              >
+            </div>
+          </div>
+
+          <hr />
+          <div class="row text-center"><h4>أو التسجيل عبر</h4></div>
+
+          <div class="row">
+            <div class="col-12 icon-row">
+              <i class="bi bi-twitter-x icon-twitter"></i>
+              <i class="bi bi-google icon-google"></i>
+              <i class="bi bi-facebook icon-facebook"></i>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

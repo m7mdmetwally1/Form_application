@@ -1,0 +1,12 @@
+.checked_position {
+  text-align: right;
+  align-items: right;
+}
+
+* {
+  color: black;
+}
+
+.white-color {
+  color: #fff;
+}

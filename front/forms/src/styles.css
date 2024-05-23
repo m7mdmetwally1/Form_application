@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+
+.backgroundColor {
+  background-color: rgb(196, 191, 191);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: sans-serif;
+  color: grey;
+}
+
+body {
+  box-sizing: border-box;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
