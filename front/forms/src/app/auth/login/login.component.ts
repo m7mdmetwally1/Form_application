@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Renderer2 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import {
   FormGroup,
   FormControl,
@@ -30,10 +31,23 @@ export class LoginComponent {
     private renderer: Renderer2,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      const token = params['token'];
+      console.log(token);
+      if (token) {
+        localStorage.setItem('userData', token);
+        this.router.navigate(['authen/profile']);
+      } else {
+        console.error('Authentication failed or token missing');
+        // Handle error appropriately
+      }
+    });
+
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],

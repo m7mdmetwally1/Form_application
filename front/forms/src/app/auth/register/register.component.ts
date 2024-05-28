@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import {
   FormGroup,
   FormControl,
@@ -32,6 +33,7 @@ export class RegisterComponent {
     mobileCheckbox: new FormControl(false),
   });
   submitted = false;
+  private apiUrl = 'http://localhost:3000/api/v1/authGoogle';
 
   countryName = ['egypt', 'america', 'saudi'];
 
@@ -40,7 +42,8 @@ export class RegisterComponent {
     private formBuilder: FormBuilder,
     private authService: AuthService,
 
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   showAlert: boolean = false;
@@ -163,6 +166,10 @@ export class RegisterComponent {
         this.signupForm.get('lastName')?.markAsDirty();
       }
     );
+  }
+
+  googleRegister() {
+    window.location.href = `${this.apiUrl}/register`;
   }
 
   ngOnDestroy() {

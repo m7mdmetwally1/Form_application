@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Observable, catchError, tap, throwError, BehaviorSubject } from 'rxjs';
 import { FormData } from '../shared/formData';
 import { Form } from '@angular/forms';
@@ -66,6 +70,30 @@ export class AuthService {
         tap((resData) => {
           this.handleAuthentication(resData);
         })
+      );
+  }
+
+  newPassword(password: any) {
+    return this._HttpClient
+      .get<any>('http://localhost:3000/api/v1/users/newPassword')
+      .pipe(
+        tap((returnedData) => {
+          // localStorage.setItem('userData', returnedData.token);
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  forgetPassword(email: any) {
+    return this._HttpClient
+      .post<any>('http://localhost:3000/api/v1/users/forgetPassword', {
+        email: email,
+      })
+      .pipe(
+        tap((returnedData) => {
+          // localStorage.setItem('userData', returnedData.token);
+        }),
+        catchError(this.handleError)
       );
   }
 

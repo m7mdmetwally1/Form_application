@@ -1,35 +1,16 @@
-// const express = require("express");
+const express = require("express");
 
-// const router = express.Router();
-// const passport = require("passport");
+const router = express.Router();
 
-// require("./../utils/passportSetup");
-// const authGoogle = require("./../controllers/authGoogle");
+const authGoogle = require("./../controllers/authGoogle");
 
-// // router.post("/googleRegister", authGoogle.googleSignup);
+router.route("/register").get(authGoogle.register);
+router.route("/callback").get(authGoogle.callback);
+router.route("/signup").get(authGoogle.signup);
 
-// router.get("auth/google", authGoogle.register);
-// router.get("auth/google/callback", authGoogle.callback);
+function isLoggedIn(req, res, next) {
+  req.user ? next() : res.sendStatus(401);
+}
+router.route("/protected").get(authGoogle.login);
 
-// function isLoggedIn(req, res, next) {
-//   req.user ? next() : res.sendStatus(401);
-// }
-
-// router.get("auth/google/protected", isLoggedIn, authGoogle.login);
-
-// app.get(
-//   "/auth/google",
-//   passport.authenticate("google", { scope: ["email", "profile"] })
-// );
-
-// app.get(
-//   "/auth/google/callback",
-//   passport.authenticate("google", {
-//     successRedirect: "/protected",
-//     failureRedirect: "/auth/google/failure",
-//   })
-// );
-
-// app.get("/protected", isLoggedIn, (req, res) => {
-//   res.send(`Hello ${req.user.displayName}`);
-// });
+module.exports = router;

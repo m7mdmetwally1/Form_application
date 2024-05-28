@@ -29,8 +29,17 @@ export class OtpCheckComponent {
     let checkOtpResponse = this.authService.checkOtp(otpValue);
 
     checkOtpResponse.subscribe(
-      () => {
+      (res) => {
         console.log('success');
+
+        console.log(res);
+
+        if()
+
+        // if (res.otpCode) {
+        //   this.router.navigate(['/newOassword']);
+        // }
+
         this.router.navigate(['/login']);
       },
       () => {

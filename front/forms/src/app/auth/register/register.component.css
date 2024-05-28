@@ -10,3 +10,27 @@
 .white-color {
   color: #fff;
 }
+
+
+.icon-row {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.bi {
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.icon-facebook {
+  color: #3b5998;
+}
+
+.icon-twitter {
+  color: #1da1f2;
+}
+
+.icon-google {
+  color: #db4437;
+}

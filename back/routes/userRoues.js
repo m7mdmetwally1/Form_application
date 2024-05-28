@@ -6,6 +6,7 @@ const { addUser } = require("./../models/user/userValidation");
 
 const authController = require("./../controllers/authController");
 
+router.post("/forgetPassword", authController.forgotPassword);
 router.post("/checkOtp", authController.checkOtp);
 router.post("/login", authController.login);
 router.use(authController.protect);

@@ -105,8 +105,6 @@ exports.checkOtp = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
 exports.protect = catchAsync(async (req, res, next) => {
   const email = req.body.email;
 
@@ -174,4 +172,37 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   createSendToken(user, 200, "", "", req, res);
+});
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  const otpCode = generateRandomNumber();
+
+  if (!user) {
+    console.log("no user");
+    res.status(200).json({
+      status: "fail",
+      message: "no user",
+    });
+  }
+
+  try {
+    await new Email(user, otpCode).sendWelcome();
+
+    console.log(otpCode);
+    console.log("before res");
+
+    res.status(200).json({
+      status: "success",
+      otpCode,
+    });
+  } catch (err) {
+    console.log("error");
+
+    res.status(200).json({
+      status: "eror",
+      message: "",
+    });
+  }
 });

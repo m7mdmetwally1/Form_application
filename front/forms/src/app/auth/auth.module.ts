@@ -6,6 +6,8 @@ import { AuthComponent } from './auth.component';
 import { AuthRoutingModule } from './auth-routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { OtpCheckComponent } from './otp-check/otp-check.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { NewPasswordComponent } from './new-password/new-password.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +15,8 @@ import { OtpCheckComponent } from './otp-check/otp-check.component';
     RegisterComponent,
     AuthComponent,
     OtpCheckComponent,
+    ForgetPasswordComponent,
+    NewPasswordComponent,
   ],
   imports: [CommonModule, AuthRoutingModule, ReactiveFormsModule, FormsModule],
   exports: [
