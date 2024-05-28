@@ -15,5 +15,11 @@ import { OtpCheckComponent } from './otp-check/otp-check.component';
     OtpCheckComponent,
   ],
   imports: [CommonModule, AuthRoutingModule, ReactiveFormsModule, FormsModule],
+  exports: [
+    LoginComponent,
+    RegisterComponent,
+    AuthComponent,
+    OtpCheckComponent,
+  ],
 })
 export class AuthModule {}

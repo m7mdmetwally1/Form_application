@@ -6,12 +6,9 @@ import {
   AbstractControl,
   FormBuilder,
   Validators,
-  ReactiveFormsModule,
 } from '@angular/forms';
 import { mobileNumberValidator } from '../auth.utility';
 import Validation from '../auth.utility';
-import { FormData } from '../../shared/formData';
-import { ChangeDetectorRef } from '@angular/core';
 
 import { AuthService } from '../../service/auth.service';
 import { Router } from '@angular/router';
@@ -42,7 +39,7 @@ export class RegisterComponent {
     private renderer: Renderer2,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef,
+
     private router: Router
   ) {}
 
@@ -164,7 +161,6 @@ export class RegisterComponent {
         this.signupForm.get('firstName')?.markAsDirty();
         this.signupForm.get('lastName')?.markAsTouched();
         this.signupForm.get('lastName')?.markAsDirty();
-        this.cdr.detectChanges();
       }
     );
   }

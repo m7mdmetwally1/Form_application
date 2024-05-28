@@ -8,9 +8,12 @@ const bodyParser = require("body-parser");
 // const googleRoutes = require("./routes/googleRoutes");
 
 const userRoutes = require("./routes/userRoues");
+const profileRoutes = require("./routes/profileRoutes");
 require("./utils/passportSetup");
 
 const app = express();
+
+app.use("/uploads", express.static("uploads"));
 
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
@@ -27,6 +30,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/profiles", profileRoutes);
+
 // app.use("/api/v1/users", googleRoutes);
 
 module.exports = app;

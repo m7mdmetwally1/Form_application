@@ -11,7 +11,6 @@ export class AuthService {
   public errorMessage: string = '';
   public otpMethod: string = '';
   public email: string = '';
-  public authenticated: boolean = false;
 
   userToken = new BehaviorSubject<any>(null);
 
@@ -43,7 +42,17 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.userToken.getValue();
+    const token = localStorage.getItem('userData');
+
+    if (token) {
+      return true;
+    }
+    // console.log(this.userToken.getValue());
+    if (this.userToken.getValue()) {
+      return true;
+    }
+
+    return false;
   }
 
   login(email: string, password: string) {
@@ -61,11 +70,7 @@ export class AuthService {
   }
 
   private handleAuthentication(resData: any) {
-    // const expirationData = new Date(new Date().getTime() + +expiresIn * 1000);
-    // const user = new User(email, userId, token, expirationData);
-    // this.user.next(user);
-    // this.autoLogout(expiresIn * 1000);
-    localStorage.setItem('userData', JSON.stringify(resData.token));
+    localStorage.setItem('userData', resData.token);
     this.userToken.next(resData.token);
   }
 

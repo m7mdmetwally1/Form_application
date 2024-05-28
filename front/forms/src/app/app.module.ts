@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import {
+  HTTP_INTERCEPTORS,
   HttpClientModule,
   provideHttpClient,
   withInterceptors,
@@ -13,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ProfileModule } from './profile/profile.module';
 import { AuthModule } from './auth/auth.module';
-import { AuthInterceptorsService } from './service/auth-interceptors.service';
+import { AuthInterceptorService } from './service/auth-interceptors.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +26,7 @@ import { AuthInterceptorsService } from './service/auth-interceptors.service';
     AuthModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [provideHttpClient(withInterceptors([AuthInterceptorService]))],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

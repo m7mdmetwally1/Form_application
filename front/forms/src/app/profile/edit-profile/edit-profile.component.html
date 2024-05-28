@@ -1,25 +1,43 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-12">
-      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-        <div class="row">
-          <div class="col-12 personal_info_title">
-            <div>
-              <h4>الصورة الشخصية</h4>
-              <p>الصورة بصيغة png</p>
-              <button class="btn btn-success" formControlName="addPhoto">
-                إضافة صورة
-              </button>
-            </div>
-            <div class="icon-container">
+      <div class="row">
+        <div class="col-12 personal_info_title">
+          <div>
+            <h4>الصورة الشخصية</h4>
+            <p>الصورة بصيغة png</p>
+            <button class="btn btn-success" (click)="triggerFileInput()">
+              إضافة صورة
+            </button>
+            <input
+              type="file"
+              id="fileInput"
+              (change)="onFileSelected($event)"
+              hidden
+            />
+          </div>
+          <!-- <div class="icon-container">
               <i
                 class="bi bi-person-fill"
                 style="font-size: 100px; border-radius: 15px"
               ></i>
-            </div>
+            </div> -->
+          <div class="icon-container">
+            <i
+              *ngIf="!imageUrl"
+              class="bi bi-person-fill"
+              style="font-size: 100px; border-radius: 15px"
+            ></i>
+            <img
+              *ngIf="imageUrl"
+              [src]="imageUrl"
+              style="width: 150px; height: 150px; border-radius: 15px"
+              alt="Uploaded Image"
+            />
           </div>
         </div>
-
+      </div>
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
         <div class="row mt-3">
           <div
             class="col-12"
@@ -59,7 +77,17 @@
                   class="form-control formInput"
                   id="fullNameAr"
                   formControlName="fullNameArabic"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['fullNameArabic'].errors
+                  }"
                 />
+
+                @if (submitted && f['fullNameArabic'].errors){
+                <div class="invalid-feedback">
+                  @if (f['fullNameArabic'].errors['required']) { fullName is
+                  required }
+                </div>
+                }
               </div>
               <div class="col-6">
                 <label for="fullNameEn" class="form-label"
@@ -113,7 +141,7 @@
                     أنثى
                     <input
                       type="radio"
-                      formControlName="dind"
+                      formControlName="kind"
                       class="checked_position"
                     />
                   </label>
@@ -160,7 +188,15 @@
                   class="form-control formInput"
                   id="country"
                   formControlName="address"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['fullNameArabic'].errors
+                  }"
                 />
+                @if (submitted && f['address'].errors){
+                <div class="invalid-feedback">
+                  @if (f['address'].errors['required']) { address is required }
+                </div>
+                }
               </div>
             </div>
           </div>

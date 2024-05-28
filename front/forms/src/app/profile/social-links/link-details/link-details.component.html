@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-12 flex_">
+    <form [formGroup]="formGroup" (ngSubmit)="addLink()">
+      <div class="col-12 flex_">
+        <div style="width: 200px; height: 30px" class="mx-5">
+          <button class="btn btn-success" type="submit">احفظ</button>
+        </div>
+
+        <div style="height: 30px; width: 300px">
+          <input
+            type="text"
+            id="link"
+            class="form-control formInput"
+            placeholder="الرابط"
+            formControlName="link"
+          />
+        </div>
+        <div
+          class="link-type p-2"
+          style="color: #ffff; text-align: center; width: 100px"
+        >
+          {{ link }}
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

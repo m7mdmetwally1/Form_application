@@ -10,34 +10,21 @@
 
       <div class="row">
         <div class="col-12 buttons-layout">
-          <button class="btn btn-light">
-            linked in<i class="bi bi-plus"></i>
+          @for (link of links ;track link ; let index =$index){
+          <button
+            class="btn btn-secondary"
+            (click)="gettingLink(link)"
+            routerLink="{{ index }}"
+          >
+            {{ link }}
           </button>
-          <button class="btn btn-light">
-            facebook <i class="bi bi-plus"></i>
-          </button>
-          <button class="btn btn-light">
-            Githup <i class="bi bi-plus"></i>
-          </button>
-          <button class="btn btn-light">
-            Behance <i class="bi bi-plus"></i>
-          </button>
-          <button class="btn btn-light">
-            Driblle <i class="bi bi-plus"></i>
-          </button>
-          <button class="btn btn-light">
-            instagram <i class="bi bi-plus"></i>
-          </button>
-          <button class="btn btn-light">X <i class="bi bi-plus"></i></button>
-          <button class="btn btn-light">
-            youtube<i class="bi bi-plus"></i>
-          </button>
-          <button class="btn btn-light">
-            blogger <i class="bi bi-plus"></i>
-          </button>
+          }
         </div>
       </div>
       <hr />
+      <div class="row">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </div>
 </div>

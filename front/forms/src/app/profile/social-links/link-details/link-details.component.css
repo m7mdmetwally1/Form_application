@@ -1,0 +1,11 @@
+.flex_ {
+  display: flex;
+  justify-content: end;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.link-type {
+  border-radius: 10px;
+  background-color: rgb(126, 143, 143);
+}

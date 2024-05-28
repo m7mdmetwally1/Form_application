@@ -1,9 +1,13 @@
-import { Injectable } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthInterceptorsService {
+export const AuthInterceptorService: HttpInterceptorFn = (req, next) => {
+  const authToken = localStorage.getItem('userData');
 
-  constructor() { }
-}
+  const authReq = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+
+  return next(authReq);
+};

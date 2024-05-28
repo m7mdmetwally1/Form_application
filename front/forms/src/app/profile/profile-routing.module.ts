@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { SocialLinksComponent } from './social-links/social-links.component';
+import { LinkDetailsComponent } from './social-links/link-details/link-details.component';
 
 const routes: Routes = [
   {
@@ -10,7 +11,11 @@ const routes: Routes = [
     component: ProfileComponent,
     children: [
       { path: 'edit', component: EditProfileComponent },
-      { path: 'social', component: SocialLinksComponent },
+      {
+        path: 'social',
+        component: SocialLinksComponent,
+        children: [{ path: ':id', component: LinkDetailsComponent }],
+      },
       { path: '', redirectTo: 'edit', pathMatch: 'full' },
     ],
   },

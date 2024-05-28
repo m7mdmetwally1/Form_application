@@ -105,6 +105,8 @@ exports.checkOtp = catchAsync(async (req, res, next) => {
   });
 });
 
+
+
 exports.protect = catchAsync(async (req, res, next) => {
   const email = req.body.email;
 

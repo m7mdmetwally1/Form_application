@@ -1,8 +1,11 @@
 <div class="container mt-2">
   <div class="row justify-content-end">
     <div class="col-8 m-4">
-      <router-outlet></router-outlet>
+      <router-outlet
+        (onSubmitted)="handleFormSubmission($event)"
+      ></router-outlet>
     </div>
+
     <div
       class="col-3"
       style="display: flex; align-items: stretch; min-height: 100vh"

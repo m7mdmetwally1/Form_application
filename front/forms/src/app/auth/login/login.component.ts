@@ -1,17 +1,12 @@
-import { Component } from '@angular/core';
-import { OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { Renderer2 } from '@angular/core';
 import {
   FormGroup,
   FormControl,
   AbstractControl,
   FormBuilder,
   Validators,
-  ReactiveFormsModule,
 } from '@angular/forms';
-import { mobileNumberValidator } from '../auth.utility';
-import Validation from '../auth.utility';
-import { FormData } from '../../shared/formData';
-import { ChangeDetectorRef } from '@angular/core';
 
 import { AuthService } from '../../service/auth.service';
 import { Router } from '@angular/router';
@@ -22,6 +17,8 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  @Output() public click = new EventEmitter<any>();
+
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
@@ -33,7 +30,6 @@ export class LoginComponent {
     private renderer: Renderer2,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
 
@@ -55,6 +51,8 @@ export class LoginComponent {
   }
 
   onSubmit() {
+    this.click.emit('mohamed');
+    console.log('mohamed');
     this.submitted = true;
 
     const email = this.loginForm.get('email')?.value;
@@ -67,6 +65,7 @@ export class LoginComponent {
         // this.signupForm.reset();
         console.log(formData.token);
         console.log('success');
+        console.log('in login response');
         this.authService.userToken.next(formData.token);
         this.router.navigate(['authen/profile']);
       },

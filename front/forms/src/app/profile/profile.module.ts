@@ -5,15 +5,26 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { SocialLinksComponent } from './social-links/social-links.component';
 import { ProfileComponent } from './profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { LinkDetailsComponent } from './social-links/link-details/link-details.component';
 
 @NgModule({
-  declarations: [EditProfileComponent, SocialLinksComponent, ProfileComponent],
+  declarations: [
+    EditProfileComponent,
+    SocialLinksComponent,
+    ProfileComponent,
+    LinkDetailsComponent,
+  ],
   imports: [
-    CommonModule,
     ProfileRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    CommonModule,
+  ],
+  exports: [
+    EditProfileComponent,
+    SocialLinksComponent,
+    ProfileComponent,
+    LinkDetailsComponent,
   ],
 })
 export class ProfileModule {}
