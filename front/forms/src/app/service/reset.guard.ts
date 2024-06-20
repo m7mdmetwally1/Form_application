@@ -8,11 +8,11 @@ import {
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
-export const authGuard: CanActivateFn = (
+export const resetGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {
-  return !!localStorage.getItem('userData')
+  return !!localStorage.getItem('resetToken')
     ? true
     : inject(Router).createUrlTree(['/auth/login']);
 };

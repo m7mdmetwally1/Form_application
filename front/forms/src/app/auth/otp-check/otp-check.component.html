@@ -1,31 +1,94 @@
 <div class="container mt-5 w-60 justify-content-end">
-    @if (showAlert) {
-        <div class="alert alert-danger" role="alert">
-          {{ serverErrorMessage }}
-        </div>
-        }
-  <div class="row w-50 text-center">
-    <div class="col-12">
+  @if (verified) {
+  <div class="alert alert-custom" role="alert">
+    email verified you can now login
+  </div>
+  } @if (resended) {
+  <div class="alert alert-custom" role="alert">
+    otp number has been resended check your email
+  </div>
+  } @if (showAlert) {
+  <div class="alert alert-danger" role="alert">
+    {{ serverErrorMessage }}
+  </div>
+  } @if (isLoading) {
+  <div class="row text-center mt-5 m-auto w-75">
+    <div class="mt-5 mb-5"></div>
+    <div class="col-12 text-center mt-5">
+      <div class="spinner-border text-success" role="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+  </div>
+  } @if(!isLoading){
+  <div class="row m-auto w-50 mt-4">
+    <div class="col-12 mt-5">
       <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)">
-        <div class="form-group">
-          <label for="otpNumber" mb-4 style="color: #fff">Verify number</label>
-          <input
-            type="number"
-            class="form-control formInput"
-            id="otpNumber"
-            name="otpNumber"
-            placeholder=""
-            [(ngModel)]="form.otpNumber"
-            #otpNumber="ngModel"
-            required
-          />
+        <div class="form-group text-center">
+          <label for="otpNumber" style="color: #fff" class="mb-4"
+            >Verify number</label
+          >
+          <div class="input_flex">
+            <input
+              type="number"
+              class="form-control formInput mb-4"
+              style="width: 80px"
+              id="otpNumber1"
+              name="otpNumber1"
+              placeholder=""
+              [(ngModel)]="form.otpNumber1"
+              #otpNumber1="ngModel"
+              required
+            />
+            <input
+              type="number"
+              class="form-control formInput mb-4"
+              style="width: 80px"
+              id="otpNumber2"
+              name="otpNumber2"
+              placeholder=""
+              [(ngModel)]="form.otpNumber2"
+              #otpNumber2="ngModel"
+              required
+            />
+            <input
+              type="number"
+              class="form-control formInput mb-4"
+              style="width: 80px"
+              id="otpNumber3"
+              name="otpNumber3"
+              placeholder=""
+              [(ngModel)]="form.otpNumber3"
+              #otpNumber3="ngModel"
+              required
+            />
+            <input
+              type="number"
+              class="form-control formInput mb-4"
+              style="width: 80px"
+              id="otpNumber4"
+              name="otpNumber4"
+              placeholder=""
+              [(ngModel)]="form.otpNumber4"
+              #otpNumber4="ngModel"
+              required
+            />
+          </div>
 
-          @if(submitted && otpNumber.errors ){ @if(otpNumber.errors['type']){
+          @if(submitted && otpNumber1.errors ){ @if(otpNumber1.errors['type']){
           <div class="invalid-feedback">code should be number</div>
           } }
-          <button type="submit" class="btn btn-success px-5 mt-3">تأكيد</button>
+          <button type="submit" class="btn btn-success px-5 m-3">تأكيد</button>
+          <button
+            type=""
+            class="btn btn-success px-5 m-3"
+            (click)="resendOtp()"
+          >
+            إعادة إرسال
+          </button>
         </div>
       </form>
     </div>
   </div>
+  }
 </div>

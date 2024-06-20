@@ -1,0 +1,13 @@
+.alert-custom {
+  background-color: #17a2b8;
+  color: white;
+  border-color: #117a8b;
+  margin: auto;
+  width: 300px;
+}
+
+.input_flex {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}

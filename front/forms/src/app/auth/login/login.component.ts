@@ -19,6 +19,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   @Output() public click = new EventEmitter<any>();
+  private apiUrl = 'http://localhost:3000/api/v1/authGoogle';
+  private apiUrl2 = 'http://localhost:3000/api/v1/authFacebook';
 
   loginForm: FormGroup = new FormGroup({
     email: new FormControl(''),
@@ -26,6 +28,9 @@ export class LoginComponent {
   });
 
   submitted = false;
+  showAlert: boolean = false;
+  isLoading: boolean = false;
+  serverErrorMessage: string = '';
 
   constructor(
     private renderer: Renderer2,
@@ -36,28 +41,22 @@ export class LoginComponent {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      const token = params['token'];
-      console.log(token);
-      if (token) {
-        localStorage.setItem('userData', token);
-        this.router.navigate(['authen/profile']);
-      } else {
-        console.error('Authentication failed or token missing');
-        // Handle error appropriately
-      }
-    });
+    const token = this.route.snapshot.queryParams['token'];
+    if (token) {
+      localStorage.setItem('userData', token);
+      this.router.navigate(['authen/profile']);
+    }
 
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
 
-    this.renderer.setStyle(
-      document.body,
-      'backgroundImage',
-      'url("../../../assets/images4.png")'
-    );
+    // this.renderer.setStyle(
+    //   document.body,
+    //   'backgroundImage',
+    //   'url("../../../assets/images4.png")'
+    // );
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -65,9 +64,11 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    this.click.emit('mohamed');
-    console.log('mohamed');
     this.submitted = true;
+
+    if (this.loginForm.invalid) {
+      return;
+    }
 
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
@@ -84,9 +85,20 @@ export class LoginComponent {
         this.router.navigate(['authen/profile']);
       },
       (errorMessage) => {
-        console.log('fail');
+        this.serverErrorMessage = errorMessage;
+        this.showAlert = true;
+        this.submitted = false;
+        this.loginForm.reset();
       }
     );
+  }
+
+  googleLogin() {
+    window.location.href = `${this.apiUrl}/register`;
+  }
+
+  facebookLogin() {
+    window.location.href = `${this.apiUrl2}/login`;
   }
 
   ngOnDestroy() {

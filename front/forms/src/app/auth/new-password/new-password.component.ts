@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-password',
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class NewPasswordComponent {
   showAlert: boolean = false;
   serverErrorMessage = '';
+  newPass: boolean = false;
 
   submitted: boolean = false;
   form = {
@@ -18,26 +19,34 @@ export class NewPasswordComponent {
   };
   constructor(private authService: AuthService, private router: Router) {}
 
+  private activateRoute = inject(ActivatedRoute);
+
+  token = this.activateRoute.snapshot.params['id'];
+
   onSubmit(form: NgForm) {
     if (form.invalid) {
       return;
     }
-    console.log(form);
+
     const password = form.value.password;
 
-    console.log(password);
-    let newPassword = this.authService.newPassword(password);
+    let newPassword = this.authService.newPassword(password, this.token);
 
     newPassword.subscribe(
       () => {
-        console.log('success');
-        this.router.navigate(['/authen/profile']);
+        localStorage.removeItem('resetToken');
+        this.newPass = true;
+        setTimeout(() => {
+          this.router.navigate(['/auth/login']);
+        }, 2000);
       },
-      () => {
-        console.log('fail');
+      (errorMessage) => {
+        this.serverErrorMessage = errorMessage;
+        this.showAlert = true;
+        setTimeout(() => {
+          this.showAlert = false;
+        }, 2000);
       }
     );
-
-    console.log('in submit');
   }
 }

@@ -10,6 +10,6 @@ export interface updateFormDate {
     dateOfBirth: string;
     fullNameArabic: string;
     fullNameEnglish: string;
-    socialMediaLinks:{}
+    socialMediaLinks:{[key:string]:string}
   }
   

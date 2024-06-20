@@ -17,18 +17,15 @@ exports.createSendToken = (req, res, user) => {
 
 exports.register = (req, res, next) => {
   //   const redirectUrl = `http://localhost:3000/api/v1/authGoogle/signup`;
-  console.log("in register");
-  res.redirect("/api/v1/authGoogle/signup");
-};
 
-exports.signup = (req, res, next) => {
-  console.log("in signup");
   passport.authenticate("google", { scope: ["email", "profile"] })(
     req,
     res,
     next
   );
 };
+
+
 
 exports.callback = (req, res, next) => {
   passport.authenticate("google", {

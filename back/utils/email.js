@@ -1,11 +1,12 @@
 const nodemailer = require("nodemailer");
 
 module.exports = class Email {
-  constructor(user, otpNumber) {
+  constructor(user, { otpCode, url } = {}) {
     this.firstName = user.firstName;
     this.from = `mohamed metwally <${process.env.EMAIL_FROM}>`;
     this.to = user.email;
-    this.otpNumber = otpNumber;
+    this.otpNumber = otpCode;
+    this.url = url;
   }
 
   newTransport() {
@@ -21,14 +22,17 @@ module.exports = class Email {
     });
   }
 
-  async send(otpNumber) {
+  async send(template, message) {
     const mailOptions = {
       from: this.from,
       to: this.to,
-      subject: "my subject",
+      url: this.url,
+      subject: template,
       html: `<html>
       <body>
-     this is the otp Number  ${otpNumber}
+      ${message}
+      and this is  the url to confirm
+      ${this.url}
       </body>
      </html>`,
     };
@@ -44,7 +48,7 @@ module.exports = class Email {
   }
 
   async sendWelcome() {
-    await this.send(this.otpNumber);
+    await this.send("welcome", `your otp number is ${this.otpNumber}`);
   }
 
   async sendPasswordReset() {

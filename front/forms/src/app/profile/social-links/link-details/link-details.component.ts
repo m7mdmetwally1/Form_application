@@ -42,15 +42,9 @@ export class LinkDetailsComponent {
   }
 
   addLink() {
-    console.log(this.formGroup.value);
-
-    console.log(this.formGroup.get('link')?.value);
-
     const link_ = this.formGroup.get('link')?.value;
 
     this.profileService.addLinks(this.link, link_);
-    // this.profileService.handleUpdateProfileData();
-
     this.formGroup.reset();
     this.router.navigate(['social']);
   }

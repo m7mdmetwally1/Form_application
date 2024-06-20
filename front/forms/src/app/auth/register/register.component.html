@@ -1,23 +1,44 @@
-<div class="container mt-3">
-  @if (showAlert) {
-  <div class="alert alert-danger" role="alert">
-    {{ serverErrorMessage }}
-  </div>
-  }
+<div class="container">
   <div class="row">
     <div class="col-12">
-      <div class="row text-center mt-3">
+      <div class="row w-75 m-auto mt-3 text-center">
+        @if (showAlert) {
+        <div class="alert alert-danger" role="alert">
+          {{ serverErrorMessage }}
+        </div>
+        } @if (emailSent) {
+        <div class="alert alert-custom" role="alert">
+          email sent successfully check your email to verify
+        </div>
+        } @if (isLoading) {
+        <div class="row text-center mt-5 m-auto w-75">
+          <div class="mt-5 mb-5"></div>
+          <div class="col-12 text-center mt-5">
+            <div class="spinner-border text-success" role="status">
+              <span class="sr-only"></span>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      @if(!isLoading){
+
+      <div class="row text-center">
         <h1 class="white-color">تسجيل الدخول</h1>
         <h4 class="white-color">قم بالتسجيل لنتائج بحثية أفضل</h4>
       </div>
-
-      <div class="w-75 m-auto mt-5">
-        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="w-50 m-auto form_background">
+        <form
+          [formGroup]="signupForm"
+          *ngIf="!isLoading"
+          (ngSubmit)="onSubmit()"
+        >
           <div class="row mb-3">
             <div class="col-6 form-group">
               <input
                 type="text"
-                class="form-control formInput"
+                class="form-control formInput field_height"
                 id="firstName"
                 placeholder="الأسم الأول"
                 formControlName="firstName"
@@ -38,9 +59,9 @@
             <div class="col-6 form-group">
               <input
                 type="text"
-                class="form-control formInput"
+                class="form-control formInput field_height"
                 id="lastName"
-                placeholder="الأسم الأول"
+                placeholder="الأسم الاخير"
                 formControlName="lastName"
                 [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }"
               />
@@ -62,7 +83,7 @@
             <div class="col-6">
               <input
                 type="email"
-                class="form-control formInput"
+                class="form-control formInput field_height"
                 placeholder="البريد الإلكترونى"
                 formControlName="email"
                 id="email"
@@ -78,10 +99,11 @@
               </div>
               }
             </div>
-            <div class="col-4">
+            <div class="col-3">
               <input
                 type="text"
-                class="form-control formInput"
+                class="form-control formInput field_height"
+                style="width: 110px"
                 id="mobile"
                 formControlName="mobile"
                 placeholder="الجوال"
@@ -91,14 +113,15 @@
               <div class="invalid-feedback">
                 @if (f['mobile'].errors['required']) {
                 <div>mobile number is required</div>
-                } @if (f['mobile'].errors['invalidMobileNumber']) {
+                } @if (f['mobile'].errors['invalidMobileNumber'] &&
+                !f['mobile'].errors['required']) {
                 <div>should be valid mobile number</div>
                 }
               </div>
               }
             </div>
-            <div class="col-2">
-              <div class="dropdown">
+            <div class="col-3">
+              <div class="dropdown" style="width: 90px">
                 <select class="form-select" formControlName="country">
                   @for ( country of countryName; track country) {
                   <option [value]="country">{{ country }}</option>
@@ -112,7 +135,7 @@
             <div class="col-12 form-Group">
               <input
                 type="password"
-                class="form-control formInput"
+                class="form-control formInput field_height"
                 id="password"
                 formControlName="password"
                 [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
@@ -135,7 +158,7 @@
             <div class="col-12 form-Group">
               <input
                 type="password"
-                class="form-control formInput"
+                class="form-control formInput field_height"
                 id="passwordConfirm"
                 formControlName="passwordConfirm"
                 [ngClass]="{
@@ -157,7 +180,9 @@
           <div class="row mb-2 checked_position form-Group">
             <div class="radio">
               <label>
-                <p class="white-color">أوافق على كافة الشروط والأحكام</p>
+                <span class="white-color m-2"
+                  >أوافق على كافة الشروط والأحكام</span
+                >
                 <input
                   type="checkbox"
                   formControlName="acceptTerms"
@@ -173,7 +198,10 @@
             </div>
           </div>
 
-          <div class="row mb-5 checked_position">
+          <div
+            class="row mb-3 checked_position form-group"
+            formGroupName="checkBoxGroup"
+          >
             <div class="col-12 text-end">
               <label
                 class="form-check-label me-2 white-color"
@@ -200,16 +228,11 @@
                 id="mobileCheckbox"
                 formControlName="mobileCheckbox"
                 [ngClass]="{
-                  'is-invalid': submitted && f['mobileCheckbox'].errors
+                  'is-invalid': submitted && f['checkBoxGroup'].errors
                 }"
               />
-              @if (submitted && f['emailCheckbox'].errors){
-              <div class="invalid-feedback">
-                @if (submitted && f['mobileCheckbox'].errors ){
-                <div>at least one method required</div>
-                }
-              </div>
-
+              @if(submitted && f['checkBoxGroup'].errors){
+              <div class="invalid-feedback">at least one required</div>
               }
 
               <span class="white-color"> إرسال رمز التحقق من خلال</span>
@@ -218,28 +241,36 @@
 
           <div class="row mb-3">
             <div class="col-12 text-center form-Group">
-              <button type="submit" class="btn btn-success px-5">تسجيل</button>
+              <button
+                type="submit"
+                class="btn btn-success btn_custom_color px-5"
+              >
+                تسجيل
+              </button>
             </div>
           </div>
         </form>
 
         <div class="row text-center">
-          <h4 class="white-color">أو التسجيل عبر</h4>
+          <span class="white-color">أو التسجيل عبر</span>
+
+          <div class="col-12 icon-row">
+            <i class="bi bi-google icon-google" (click)="googleRegister()"></i>
+            <i
+              class="bi bi-facebook icon-facebook"
+              (click)="facebookRegister()"
+            ></i>
+          </div>
         </div>
 
         <div class="row">
-          <div class="col-12 icon-row">
-            <i class="bi bi-google icon-google" (click)="googleRegister()"></i>
-            <i class="bi bi-facebook icon-facebook"></i>
-          </div>
-        </div>
-
-        <div class="row mb-5">
           <div class="col-12 text-center" style="font-weight: bold">
-            لديك حساب <a href="/login" style="color: yellow">تسجيل الدخول</a>
+            لديك حساب ؟
+            <a href="/login" style="color: rgb(126, 187, 65)">تسجيل الدخول</a>
           </div>
         </div>
       </div>
+      }
     </div>
   </div>
 </div>

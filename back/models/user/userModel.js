@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const { DataTypes } = require("sequelize");
+const crypto = require("crypto");
 const sequelize = require("../../utils/databaseConnectionForQueries");
 
 const User = sequelize.define("User", {
@@ -71,7 +72,29 @@ const User = sequelize.define("User", {
     type: DataTypes.BOOLEAN,
     required: false,
   },
+  passwordResetToken: DataTypes.STRING,
+  expiresResetToken: DataTypes.DATE,
 });
+
+User.prototype.createPasswordResetToken = function() {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.expiresResetToken = Date.now() + 1 * 60 * 1000;
+
+  return resetToken;
+};
+
+User.prototype.correctPassword = async function(
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 User.beforeCreate((user, options) => {
   return bcrypt

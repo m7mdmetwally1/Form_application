@@ -5,10 +5,13 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+const facebookStrategy = require("passport-facebook").Strategy;
+const globalErrorHandler = require("./controllers/errorController");
 
 const userRoutes = require("./routes/userRoues");
 const profileRoutes = require("./routes/profileRoutes");
 const googleRoutes = require("./routes/googleRoutes");
+const facebookRoutes = require("./routes/facebookRoutes");
 
 const app = express();
 
@@ -33,21 +36,8 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/profiles", profileRoutes);
 app.use("/api/v1/authGoogle", googleRoutes);
-// app.use("api/v1/auth");
+app.use("/api/v1/authFacebook", facebookRoutes);
+
+app.use(globalErrorHandler);
 
 module.exports = app;
-
-// app.get("/", async (req, res) => {
-//   const { data, error } = await resend.emails.send({
-//     from: "no-reply@metwallydev.shop",
-//     to: ["agemy844@gmail.com"],
-//     subject: "hello world",
-//     html: "<strong>it works!</strong>",
-//   });
-
-//   if (error) {
-//     return res.status(400).json({ error });
-//   }
-
-//   res.status(200).json({ data });
-// });

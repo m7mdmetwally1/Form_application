@@ -1,9 +1,7 @@
 <div class="container mt-2">
   <div class="row justify-content-end">
     <div class="col-8 m-4">
-      <router-outlet
-        (onSubmitted)="handleFormSubmission($event)"
-      ></router-outlet>
+      <router-outlet></router-outlet>
     </div>
 
     <div
@@ -28,6 +26,13 @@
               <div class="col-12 personal_info">
                 روابط التواصل الإجتماعى
                 <i class="bi bi-link-45deg"></i>
+              </div>
+            </a>
+          </div>
+          <div class="row p-2" style="border-radius: 10px">
+            <a>
+              <div class="col-12 personal_info" (click)="logout()">
+                تسجيل الخروج
               </div>
             </a>
           </div>

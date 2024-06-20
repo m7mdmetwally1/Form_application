@@ -1,13 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
-export class ProfileComponent {
-  handleFormSubmission(formValue: any) {
-    console.log('in formsubmiison method');
-    console.log('Form submitted from child component:', formValue);
+export class ProfileComponent implements OnInit {
+  ngOnInit() {}
+  private authService = inject(AuthService);
+
+  ngOninit() {}
+
+  logout() {
+    this.authService.logout();
   }
 }

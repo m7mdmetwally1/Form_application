@@ -1,14 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../../environments';
+
 import {
   FormGroup,
   FormControl,
   AbstractControl,
   FormBuilder,
+  FormGroupDirective,
   Validators,
+  RequiredValidator,
 } from '@angular/forms';
-import { mobileNumberValidator } from '../auth.utility';
+import {
+  mobileNumberValidator,
+  requireCheckboxesToBeCheckedValidator,
+} from '../auth.utility';
 import Validation from '../auth.utility';
 
 import { AuthService } from '../../service/auth.service';
@@ -20,6 +27,21 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+  submitted = false;
+  countryName = ['egypt', 'america', 'saudi'];
+  showAlert: boolean = false;
+  emailSent: boolean = false;
+  isLoading: boolean = false;
+  serverErrorMessage = '';
+  apiUrl = environment.apiUrl + 'authGoogle';
+  apiUrl2 = environment.apiUrl + 'authFacebook';
+
+  private renderer = inject(Renderer2);
+  private formBuilder = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   signupForm: FormGroup = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
@@ -27,31 +49,16 @@ export class RegisterComponent {
     password: new FormControl(''),
     passwordConfirm: new FormControl(''),
     mobile: new FormControl(''),
-    country: new FormControl(' '),
+    country: new FormControl(''),
     acceptTerms: new FormControl(false),
-    emailCheckbox: new FormControl(false),
-    mobileCheckbox: new FormControl(false),
+    checkBoxGroup: new FormGroup({
+      emailCheckbox: new FormControl(false),
+      mobileCheckbox: new FormControl(false),
+    }),
   });
-  submitted = false;
-  private apiUrl = 'http://localhost:3000/api/v1/authGoogle';
-
-  countryName = ['egypt', 'america', 'saudi'];
-
-  constructor(
-    private renderer: Renderer2,
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
-
-  showAlert: boolean = false;
-  serverErrorMessage = '';
 
   selectCountry(event: Event, country: string) {
     event.preventDefault();
-
     this.signupForm.get('country')?.setValue(country);
   }
 
@@ -87,8 +94,15 @@ export class RegisterComponent {
         passwordConfirm: ['', Validators.required],
         mobile: ['', [Validators.required, mobileNumberValidator]],
         acceptTerms: [false, Validators.requiredTrue],
-        emailCheckbox: [false, Validators.requiredTrue],
-        mobileCheckbox: [false, Validators.requiredTrue],
+        checkBoxGroup: this.formBuilder.group(
+          {
+            emailCheckbox: [false],
+            mobileCheckbox: [false],
+          },
+          {
+            validator: requireCheckboxesToBeCheckedValidator(1),
+          }
+        ),
       },
       {
         validators: [Validation.match('password', 'passwordConfirm')],
@@ -106,70 +120,80 @@ export class RegisterComponent {
     return this.signupForm.controls;
   }
 
+  get f2(): { [key: string]: AbstractControl } {
+    return (this.f['checkBoxGroup'] as FormGroup).controls;
+  }
+
   onSubmit(): void {
-    console.log(this.signupForm.value);
     this.submitted = true;
-    console.log('in submit');
 
-    console.log(this.signupForm.value);
-    const emailCheckBoxValue = this.signupForm.get('emailCheckbox')?.value;
-    const mobileCheckBoxValue = this.signupForm.get('mobileCheckbox')?.value;
-
-    const otp = emailCheckBoxValue === mobileCheckBoxValue;
-
-    if (this.signupForm.invalid && otp && !emailCheckBoxValue) {
-      console.log('invalid');
+    if (this.signupForm.invalid) {
       return;
     }
-    console.log(this.signupForm.value);
+
+    this.isLoading = true;
+
+    const emailCheckBoxValue = this.signupForm.get(
+      'checkBoxGroup.emailCheckbox'
+    )?.value;
+    const mobileCheckBoxValue = this.signupForm.get(
+      'checkBoxGroup.mobileCheckbox'
+    )?.value;
+
     let formData = this.signupForm.value;
-    console.log(formData);
-
-    formData.otpMethod = '';
-
-    if (formData.emailCheckbox) {
-      formData.otpMethod += 'email';
-    }
-
-    if (formData.mobileCheckbox) {
-      console.log('there is no mobile');
-      if (formData.otpMethod) {
-        formData.otpMethod += ', ';
-      }
-      formData.otpMethod += 'mobile';
-    }
-
-    delete formData.emailCheckbox;
-    delete formData.mobileCheckbox;
+    formData.otpMethod = this.otpMethod(
+      emailCheckBoxValue,
+      mobileCheckBoxValue
+    );
+    delete formData.checkBoxGroup;
 
     let signupResonse = this.authService.register(formData);
 
     signupResonse.subscribe(
       (formData) => {
-        // this.signupForm.reset();
-        console.log(formData);
-        this.authService.email = formData.data.user.email;
-        console.log(formData.data.user.email);
+        this.isLoading = false;
+        const email = formData.data.user.email;
 
-        this.router.navigate(['/otpCheck']);
+        localStorage.setItem('RegisteredEmail', email);
+        this.emailSent = true;
+
+        setTimeout(() => {
+          this.emailSent = false;
+        }, 3000);
+
+        this.submitted = false;
+        this.signupForm.reset();
       },
       (errorMessage) => {
+        this.isLoading = false;
         this.serverErrorMessage = errorMessage;
         this.showAlert = true;
-        this.signupForm.get('firstName')?.setValue('');
-        this.signupForm.get('lastName')?.setValue('');
 
-        // Mark them as touched and dirty
-        this.signupForm.get('firstName')?.markAsTouched();
-        this.signupForm.get('firstName')?.markAsDirty();
-        this.signupForm.get('lastName')?.markAsTouched();
-        this.signupForm.get('lastName')?.markAsDirty();
+        this.submitted = false;
+        this.signupForm.reset();
       }
     );
   }
 
+  otpMethod(emailCheckBoxValue: string, mobileCheckBoxValue: string) {
+    let otpMethods: string[] = [];
+    if (emailCheckBoxValue) {
+      otpMethods.push('email');
+    }
+
+    if (mobileCheckBoxValue) {
+      otpMethods.push('mobile');
+    }
+
+    return otpMethods.join(', ');
+  }
+
   googleRegister() {
     window.location.href = `${this.apiUrl}/register`;
+  }
+
+  facebookRegister() {
+    window.location.href = `${this.apiUrl2}/signup`;
   }
 
   ngOnDestroy() {

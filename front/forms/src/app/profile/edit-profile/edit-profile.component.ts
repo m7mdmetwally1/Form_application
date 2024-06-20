@@ -17,8 +17,6 @@ import { HttpClient } from '@angular/common/http';
 export class EditProfileComponent implements OnInit {
   submitted = false;
   imageUrl: string | ArrayBuffer | null = null;
-  // @Output() public formSubmit = new EventEmitter<any>();
-  // @Output('onSubmitted') public formSubmit = new EventEmitter<string>();
 
   editForm: FormGroup = new FormGroup({
     firstName: new FormControl(''),
@@ -92,15 +90,14 @@ export class EditProfileComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('here');
     this.submitted = true;
-    console.log(this.editForm.value);
+    console.log('in submit method in profile');
 
     this.profileService.recieveEditData(this.editForm.value);
     const data = this.profileService.handleUpdateProfileData();
-    // this.editForm.reset();
 
-    // const subsribed = this.profileService.sendDate(data);
+    this.submitted = false;
+    this.editForm.reset();
 
     data.subscribe(
       (returned) => {

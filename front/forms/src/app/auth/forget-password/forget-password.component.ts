@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 export class ForgetPasswordComponent {
   showAlert: boolean = false;
   serverErrorMessage = '';
+  sending: boolean = false;
+  emailSent: boolean = false;
 
   submitted: boolean = false;
   form = {
@@ -22,21 +24,28 @@ export class ForgetPasswordComponent {
     if (form.invalid) {
       return;
     }
-    console.log(form);
-    const email = form.value.email;
+    this.sending = true;
 
-    console.log(email);
+    const email = form.value.email;
+    form.reset();
+
     let forgetPassword = this.authService.forgetPassword(email);
 
     forgetPassword.subscribe(
       (res) => {
         console.log(res);
 
-        console.log('success');
-        this.router.navigate(['/otpCheck']);
+        this.emailSent = true;
+        this.sending = false;
+
+        setTimeout(() => {
+          this.emailSent = false;
+        }, 2000);
       },
-      () => {
-        console.log('fail');
+      (errorMessage) => {
+        this.sending = false;
+        this.serverErrorMessage = errorMessage;
+        this.showAlert = true;
       }
     );
 

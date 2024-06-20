@@ -1,12 +1,28 @@
 <div class="container register-login mt-3">
   <div class="row">
     <div class="col-12">
-      <div class="row text-center mt-5">
+      <div class="row w-75 m-auto mt-3 text-center">
+        @if (showAlert) {
+        <div class="alert alert-danger" role="alert">
+          {{ serverErrorMessage }}
+        </div>
+        }
+      </div>
+      @if (isLoading) {
+      <div class="row text-center mt-5 m-auto w-75">
+        <div class="col-12 text-center">
+          <div class="spinner-border text-success" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </div>
+      </div>
+      }
+      <div class="row text-center">
         <h1>تسجيل الدخول</h1>
         <h4>قم بتسجيل الدخول لنتائج بحثية أفضل</h4>
       </div>
 
-      <div class="w-50 m-auto mt-5">
+      <div class="w-50 m-auto mt-2 form_background">
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="row mb-4">
             <input
@@ -49,7 +65,7 @@
             <div class="col-6">
               <div class="col-12 text-start" style="font-weight: bold">
                 <a href="/forgetPassword" style="color: white">
-                  هل نسيت كلمة المرور</a
+                  هل نسيت كلمة المرور؟</a
                 >
               </div>
             </div>
@@ -65,27 +81,32 @@
 
           <div class="row mb-3">
             <div class="col-12 text-center form-Group">
-              <button type="submit" class="btn btn-success px-5">تسجيل</button>
+              <button
+                type="submit"
+                class="btn btn-success px-5 btn_custom_color"
+              >
+                تسجيل
+              </button>
             </div>
           </div>
 
           <div class="row mb-2">
             <div class="col-12 text-center" style="font-weight: bold">
-              ليس لديك حساب؟<a href="/login" style="color: yellow">
+              ليس لديك حساب؟<a href="/register" style="color: yellow">
                 تسجيل جديد</a
               >
             </div>
           </div>
-
-          <hr />
         </form>
         <div class="row text-center"><h4>أو التسجيل عبر</h4></div>
 
         <div class="row">
           <div class="col-12 icon-row">
-            <i class="bi bi-twitter-x icon-twitter"></i>
-            <i class="bi bi-google icon-google"></i>
-            <i class="bi bi-facebook icon-facebook"></i>
+            <i class="bi bi-google icon-google" (click)="googleLogin()"></i>
+            <i
+              class="bi bi-facebook icon-facebook"
+              (click)="facebookLogin()"
+            ></i>
           </div>
         </div>
       </div>

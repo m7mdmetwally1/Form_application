@@ -1,9 +1,9 @@
-.backgroundColor {
+/* .backgroundColor {
   height: 100%;
   background-image: url("./../../../assets/images4.png");
   background-size: 100% auto;
   background-repeat: no-repeat;
-}
+} */
 
 .checked_position {
   text-align: right;
@@ -35,4 +35,15 @@
 
 * {
   color: #fff;
+}
+
+.form_background {
+  background-color: rgb(54, 50, 50);
+  padding: 50px;
+  border-radius: 20px;
+}
+
+.btn_custom_color {
+  background-color: rgb(126, 187, 65);
+  width: 300px;
 }

@@ -6,7 +6,6 @@ const authGoogle = require("./../controllers/authGoogle");
 
 router.route("/register").get(authGoogle.register);
 router.route("/callback").get(authGoogle.callback);
-router.route("/signup").get(authGoogle.signup);
 
 function isLoggedIn(req, res, next) {
   req.user ? next() : res.sendStatus(401);

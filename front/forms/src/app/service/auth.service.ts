@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -7,24 +7,18 @@ import {
 import { Observable, catchError, tap, throwError, BehaviorSubject } from 'rxjs';
 import { FormData } from '../shared/formData';
 import { Form } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  public errorMessage: string = '';
-  public otpMethod: string = '';
-  public email: string = '';
-
-  userToken = new BehaviorSubject<any>(null);
-
-  constructor(private _HttpClient: HttpClient) {}
+  private errorMessage: string = '';
+  userToken = new BehaviorSubject<string>('');
+  private _HttpClient = inject(HttpClient);
+  private router = inject(Router);
 
   register(formData: FormData): Observable<any> {
-    console.log(formData);
-    console.log(formData.otpMethod);
-    console.log('i reached register');
-    console.log(this.email);
     return this._HttpClient
       .post('http://localhost:3000/api/v1/users/signup', formData)
       .pipe(
@@ -35,28 +29,30 @@ export class AuthService {
       );
   }
 
-  checkOtp(otpNumber: any) {
-    return this._HttpClient.post(
-      'http://localhost:3000/api/v1/users/checkOtp',
-      {
-        email: this.email,
+  checkOtp(otpNumber: string, email: string) {
+    console.log(email);
+    return this._HttpClient
+      .post('http://localhost:3000/api/v1/users/checkOtp', {
+        email: email,
         otpNumber: otpNumber,
-      }
-    );
+      })
+      .pipe(catchError(this.handleError));
   }
 
-  isAuthenticated(): boolean {
-    const token = localStorage.getItem('userData');
+  resendOtp(email: string) {
+    return this._HttpClient
+      .post('http://localhost:3000/api/v1/users/resendOtp', { email: email })
+      .pipe(
+        catchError(this.handleError),
+        tap((data) => {
+          console.log('success');
+        })
+      );
+  }
 
-    if (token) {
-      return true;
-    }
-    // console.log(this.userToken.getValue());
-    if (this.userToken.getValue()) {
-      return true;
-    }
-
-    return false;
+  logout() {
+    localStorage.removeItem('userData');
+    this.router.navigate(['./auth/login']);
   }
 
   login(email: string, password: string) {
@@ -73,25 +69,26 @@ export class AuthService {
       );
   }
 
-  newPassword(password: any) {
+  newPassword(password: string, token: string) {
     return this._HttpClient
-      .get<any>('http://localhost:3000/api/v1/users/newPassword')
+      .post<any>('http://localhost:3000/api/v1/users/resetPassword', {
+        password: password,
+        token: token,
+      })
       .pipe(
-        tap((returnedData) => {
-          // localStorage.setItem('userData', returnedData.token);
-        }),
+        tap((returnedData) => {}),
         catchError(this.handleError)
       );
   }
 
-  forgetPassword(email: any) {
+  forgetPassword(email: string) {
     return this._HttpClient
       .post<any>('http://localhost:3000/api/v1/users/forgetPassword', {
         email: email,
       })
       .pipe(
         tap((returnedData) => {
-          // localStorage.setItem('userData', returnedData.token);
+          localStorage.setItem('resetToken', returnedData.resetToken);
         }),
         catchError(this.handleError)
       );
@@ -99,15 +96,10 @@ export class AuthService {
 
   private handleAuthentication(resData: any) {
     localStorage.setItem('userData', resData.token);
-    this.userToken.next(resData.token);
   }
 
   private handleError = (error: HttpErrorResponse) => {
-    console.log('handle error is working');
-
-    console.log(error.error.message[0].message);
-    this.errorMessage = error.error.message[0].message;
-    console.log(this.errorMessage);
+    this.errorMessage = error.error.message;
 
     return throwError(this.errorMessage);
   };
